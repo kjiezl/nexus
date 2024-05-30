@@ -1,39 +1,124 @@
 <html>
-  <head>
-    <style>
-      body {
-        margin: 0;
-      }
+    <head>
+        <style>
+        @import url('https://fonts.googleapis.com/css2?family=Bungee+Inline&family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&family=Modak&family=MuseoModerno:ital,wght@0,100..900;1,100..900&family=Pixelify+Sans:wght@400..700&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Quantico:ital,wght@0,400;0,700;1,400;1,700&family=Radio+Canada:ital,wght@0,300..700;1,300..700&display=swap');
+        body {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            text-rendering: optimizeLegibility;
+            margin: 0;
+            background: #94a3b8;
+            font-family: "Radio Canada", sans-serif;
+            color: white;
+        }
 
-      canvas{
-        width: 100%;
-        height: 100%;
-      }
-    </style>
-  </head>
-  <body>
-    <div
-      style="
-        position: absolute;
-        color: white;
-        padding: 8px;
-        font-family: sans-serif;
-        font-size: 14px;
-        user-select: none;
-      "
-    >
-    </div>
-    <canvas></canvas>
+        input::placeholder {
+            color: #94a3b8;
+        }
 
-    <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.10.2/gsap.min.js"
-      integrity="sha512-kVlGhj2qFy+KBCFuvjBJTGUMxbdqJKs4yK2jh0e0VPhWUPiPC87bzm4THmaaIee3Oj7j6sDpTTgm2EPPiESqBg=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
-    ></script>
-    <script src="https://cdn.socket.io/4.6.1/socket.io.min.js"></script>
-    <script src="./js/classes/Player.js"></script>
-    <script src="./js/eventListeners.js"></script>
-    <script src="./js/index.js"></script>
-  </body>
+        canvas{
+            width: 100%;
+            height: 100%;
+        }
+
+        #usernameInput{
+            font-family: "Radio Canada", sans-serif;
+            padding: 12px;
+            border-radius: 20px;
+            border: none;
+            background: #475569;
+            color: #cbd5e1;
+            margin: 10px;
+        }
+
+        #colorInput{
+            background: #475569;
+        }
+
+        #submitButton{
+            font-family: "Radio Canada", sans-serif;
+            margin-top: 10px;
+            padding: 8px 20px;
+            border-radius: 100px;
+            border: none;
+            background-image: linear-gradient(
+                to right,
+                rgb(6, 119, 212),
+                rgb(109, 59, 246)
+            );
+            color: white;
+            cursor: pointer;
+            transform: scale(1);
+            transition: all 300ms;
+
+            &:hover{
+                transform: scale(1.2);
+                filter: brightness(150%);
+            }
+        }
+        </style>
+    </head>
+    <body>
+        <div
+        style="
+            position: absolute;
+            color: white;
+            padding: 8px;
+            font-family: sans-serif;
+            font-size: 14px;
+            user-select: none;
+        ">
+        </div>
+        <canvas></canvas>
+
+        <div
+            id="formDiv"
+            style="
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                position: absolute;
+                top: 0;
+                right: 0;
+                bottom: 0;
+                left: 0;
+                background-color: rgba(0, 0, 0, 0.5);">
+        <form id="usernameForm">
+            <div>
+                <input
+                    id="usernameInput"
+                    class="formItem"
+                    type="text"
+                    placeholder="Set username"/>
+            </div>
+            <div style="text-align: center; margin-top: 8px">
+                <label for="playerColor">Select color:</label>
+                <input
+                    id="colorInput"
+                    class="formItem"
+                    type="color"
+                    name="playerColor"
+                    value="#ffffff"
+                    />
+            </div>
+            <div style="text-align: center; margin-top: 20px">
+                <button
+                    id="submitButton">
+                    Enter
+                </button>
+            </div>
+        </form>
+        </div>
+
+        <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.10.2/gsap.min.js"
+            integrity="sha512-kVlGhj2qFy+KBCFuvjBJTGUMxbdqJKs4yK2jh0e0VPhWUPiPC87bzm4THmaaIee3Oj7j6sDpTTgm2EPPiESqBg=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer"
+        ></script>
+        <script src="https://cdn.socket.io/4.6.1/socket.io.min.js"></script>
+        <script src="./js/classes/Player.js"></script>
+        <script src="./js/eventListeners.js"></script>
+        <script src="./js/index.js"></script>
+    </body>
 </html>

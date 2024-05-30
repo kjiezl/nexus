@@ -22,7 +22,8 @@ socket.on("update-players", (bPlayers) => {
                 x: bPlayer.x, 
                 y: bPlayer.y, 
                 radius: bPlayer.radius, 
-                color: bPlayer.color
+                color: bPlayer.color,
+                username: bPlayer.username
             });
         } else{
             if(id === socket.id){
@@ -108,6 +109,19 @@ setInterval(() => {
         socket.emit("keydown", {key: 'd', sequenceNum});
     }
 }, 15)
+
+document.querySelector("#usernameForm").addEventListener("submit", (e) => {
+    e.preventDefault();
+    const username = document.querySelector("#usernameInput").value;
+    const color = document.querySelector("#colorInput").value;
+    if(!username){
+        alert("Please enter username")
+        return;
+    }
+    document.querySelector("#usernameForm").style.display = "none";
+    document.querySelector("#formDiv").style.display = "none";
+    socket.emit("init", {username, color});
+})
 
 let animationId;
 

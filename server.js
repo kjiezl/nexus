@@ -18,13 +18,6 @@ const speed = 10;
 
 io.on("connection", (socket) => {
     console.log("a player connected");
-    bPlayers[socket.id] = {
-        x: 500 * Math.random(),
-        y: 500 * Math.random(),
-        radius: 20,
-        color: `hsl(${360 * Math.random()}, 100%, 50%)`,
-        sequenceNum: 0
-    }
 
     io.emit("update-players", bPlayers)
     console.log(bPlayers);
@@ -44,6 +37,18 @@ io.on("connection", (socket) => {
             case 'd':
                 bPlayers[socket.id].x += speed;
                 break;
+        }
+    })
+
+    socket.on("init", ({username, color}) => {
+        bPlayers[socket.id] = {
+            x: 500 * Math.random(),
+            y: 500 * Math.random(),
+            radius: 20,
+            color,
+            // color: `hsl(${360 * Math.random()}, 100%, 50%)`,
+            sequenceNum: 0,
+            username
         }
     })
 
