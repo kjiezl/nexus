@@ -52,6 +52,14 @@ io.on("connection", (socket) => {
         }
     })
 
+    socket.on("public-message", (message) => {
+        const userMessage = {
+            username: bPlayers[socket.id].username,
+            text: message
+        }
+        io.emit("public-message", userMessage);
+    })
+
     socket.on("disconnect", () => {
         delete bPlayers[socket.id];
         io.emit("update-players", bPlayers);

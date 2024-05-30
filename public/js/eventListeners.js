@@ -35,3 +35,23 @@ window.addEventListener("keyup", (e) => {
             break;
     }    
 })
+
+document.querySelector("#usernameForm").addEventListener("submit", (e) => {
+    e.preventDefault();
+    const username = $("#usernameInput").val();
+    const color = $("#colorInput").val();
+    if(!username){
+        alert("Please enter username")
+        return;
+    }
+    $("#usernameForm, #formDiv").css("display", "none");
+    socket.emit("init", {username, color});
+})
+
+$(".publicSendButton").click(() => {sendPublicMessage()})
+
+$(".publicMessageInput").keydown((e) => {
+    if(e.key === "Enter"){
+        sendPublicMessage();
+    }
+})

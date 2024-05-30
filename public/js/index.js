@@ -110,17 +110,31 @@ setInterval(() => {
     }
 }, 15)
 
-document.querySelector("#usernameForm").addEventListener("submit", (e) => {
-    e.preventDefault();
-    const username = document.querySelector("#usernameInput").value;
-    const color = document.querySelector("#colorInput").value;
-    if(!username){
-        alert("Please enter username")
-        return;
+const publicChat = document.querySelector(".public-chat-container");
+
+socket.on("public-message", (message) => {
+    const messageElement = document.createElement("div");
+
+    if(message.username === fPlayers[socket.id].username){
+        messageElement.innerHTML = `<span style="color: rgb(77, 184, 255)">${message.username}</span> : &nbsp ${message.text}`;
+    } else{
+        messageElement.innerHTML = `<span style="color: gray">${message.username}</span> : &nbsp ${message.text}`;
     }
-    document.querySelector("#usernameForm").style.display = "none";
-    document.querySelector("#formDiv").style.display = "none";
-    socket.emit("init", {username, color});
+
+    publicChat.appendChild(messageElement);
+    publicChat.scrollTop = publicChat.scrollHeight;
+})
+
+function sendPublicMessage(){
+    const message = $(".publicMessageInput").val();
+    socket.emit("public-message", message);
+    $(".publicMessageInput").val('');
+}
+
+window.addEventListener("keydown", (e) => {
+    if(e.key === "Enter"){
+        $(".public-chat-container, .public-message-container").css("display", "block");
+    }
 })
 
 let animationId;
