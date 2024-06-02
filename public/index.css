@@ -86,6 +86,7 @@ input::placeholder {
     /* background-color: rgba(108, 119, 218, 0.2); */
     font-size: 1em;
     padding: 15px 25px;
+    padding-left: 45px;
     box-sizing: border-box;
     overflow-y: scroll;
     overflow-wrap: break-word;
@@ -227,6 +228,14 @@ input::placeholder {
     }
 }
 
+.shoutout-button{
+    position: absolute;
+    bottom: 80px;
+    left: 30px;
+    /* pointer-events: none; */
+    /* margin: 80px 30px; */
+}
+
 .public-chat-button{
     display: none;
     bottom: 0;
@@ -255,6 +264,7 @@ input::placeholder {
 .options-container{
     position: absolute;
     box-sizing: border-box;
+    height: auto;
     bottom: 0;
     left: 0;
     right: 0;
@@ -265,7 +275,7 @@ input::placeholder {
     position: absolute;
     right: 0;
     top: 0;
-    margin-top: 10%;
+    margin-top: 5%;
     margin-right: 2%;
     width: 15%;
     height: 45%;
@@ -299,4 +309,77 @@ input::placeholder {
 
 .users.new-message{
     border-left: 2px solid rgba(103, 187, 255, 0.5);
+}
+
+.shoutout-container{
+    position: absolute;
+    box-sizing: border-box;
+    top: 15%;
+    left: 50%;
+    transform: translateX(-50%);
+    /* border: 1px solid white; */
+    pointer-events: none;
+    color: rgba(255, 255, 255, 0.8);
+    text-shadow: 2px 2px black;
+}
+
+.shoutout-input-container{
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.5);
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: none;
+}
+
+.shoutout-input-box{
+    position: absolute;
+    width: 30%;
+    height: 10%;
+    background-color: white;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 10px;
+    box-shadow: 5px 5px black;
+    /* overflow: hidden; */
+}
+
+.shoutout-input{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    padding: 10px;
+    padding-right: 35px;
+    border: none;
+    border-bottom: 1px solid black;
+    font-size: 1em;
+
+    &:focus{
+        outline-width: 0;
+    }
+}
+
+.shoutout-send-button{
+    color: black;
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin-top: 35px;
+    margin-right: 25px;
+}
+
+.shoutout-input-close{
+    width: 20px;
+    color: rgba(255, 255, 255, 0.5);
+    top: 0;
+    right: 0;
+    margin: -40px;
+
+    &:hover{
+        color: rgb(177, 51, 51);
+    }
 }

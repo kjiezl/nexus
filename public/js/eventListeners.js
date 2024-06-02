@@ -2,7 +2,9 @@ window.addEventListener("keydown", (e) => {
     if(!fPlayers[socket.id]) return;
 
     const publicMessageInput = $(".publicMessageInput");
-    if(!publicMessageInput.is(":focus")){
+    if(!publicMessageInput.is(":focus") 
+        && !privateMessageInput.is(":focus")
+        && !shoutoutInput.is(":focus")){
         switch(e.key){
             case 'w':
                 keys.w.pressed = true;
@@ -57,15 +59,8 @@ $(".public-send-button").click(() => {
 })
 
 $(".public-chat-button").click(() => {
-    const publicMessageInput = $(".publicMessageInput");
-    const publicMessageContainer = $(".public-message-container");
-    const publicSendButton = $(".public-send-button");
-    const publicInputClose = $(".public-input-close");
-    const publicChatButton = $(".public-chat-button");
-    const publicChatContainer = $(".public-chat-container");
-
     publicMessageContainer.add(publicMessageInput).add(publicSendButton).add(publicInputClose).css("display", "block");
-    publicChatButton.toggle();
+    publicChatButton.add(shoutoutButton).toggle();
     publicMessageInput.focus();
     publicChatContainer.css("opacity", 1);
 })
@@ -79,23 +74,32 @@ $(".private-send-button").click(() => {
 })
 
 $(".public-input-close").click(() => {
-    const publicMessageInput = $(".publicMessageInput");
-    const publicMessageContainer = $(".public-message-container");
-    const publicSendButton = $(".public-send-button");
-    const publicInputClose = $(".public-input-close");
-    const publicChatButton = $(".public-chat-button");
-    const publicChatContainer = $(".public-chat-container");
-
     publicMessageContainer.add(publicMessageInput).add(publicSendButton).add(publicInputClose).toggle();
-    publicChatButton.toggle();
+    publicChatButton.add(shoutoutButton).toggle();
     publicChatContainer.css("opacity", 0.4);
 })
 
 $(".private-input-close").click(() => {
-    const privateMessageContainer = $(".private-message-container");
-    const privateChatContainer = $(".private-chat-container");
-
     privateMessageContainer.add(privateChatContainer).css("display", "none");
 
     privateChatRecipient = null;
+})
+
+$(".shoutout-button").click(() => {
+    shoutoutInputContainer.toggle();
+})
+
+$(".shoutout-send-button").click(() => {
+    const message = shoutoutInput.val();
+    if (message.trim() !== "") {
+        socket.emit("shoutout-message", message);
+        shoutoutButton.prop("disabled", true);
+        shoutoutInput.val('');
+        shoutoutInputContainer.toggle();
+        shoutoutStartTime = window.performance.now();
+    }
+})
+
+$(".shoutout-input-close").click(() => {
+    shoutoutInputContainer.toggle();
 })

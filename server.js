@@ -144,6 +144,18 @@ io.on("connection", (socket) => {
             });
     });    
 
+    socket.on("shoutout-message", (message) => {
+        const userMessage = {
+            username: bPlayers[socket.id].username,
+            text: message
+        }
+        io.emit("shoutout-message", userMessage);
+    });    
+
+    socket.on("enable-shoutout", () => {
+        io.emit("enable-shoutout");
+    });
+
     socket.on("disconnect", () => {
         const username = socketIdToUsername[socket.id];
         delete usernameToSocketId[username];
