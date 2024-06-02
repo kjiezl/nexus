@@ -15,10 +15,10 @@ input::placeholder {
     color: #94a3b8;
 }
 
-canvas{
+/* canvas{
     width: 100%;
     height: 100%;
-}
+} */
 
 #formDiv{
     display: flex;
@@ -76,27 +76,103 @@ canvas{
     left: 0;
     margin: 20px;
     margin-bottom: 60px;
-    height: 300px;
-    width: 500px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    opacity: 0.4;
+    /* height: 300px; */
+    height: 30%;
+    /* width: 500px; */
+    width: 40%;
+    /* border: 1px solid rgba(255, 255, 255, 0.2); */
     /* border-radius: 8% 8% 0px 0px; */
-    background-color: rgba(108, 119, 218, 0.2);
+    /* background-color: rgba(108, 119, 218, 0.2); */
     font-size: 1em;
     padding: 15px 25px;
     box-sizing: border-box;
-    overflow: auto;
+    overflow-y: scroll;
     overflow-wrap: break-word;
-    scrollbar-color: white black;
-    display: none;
+    /* scrollbar-color: white black; */
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar{
+        display: none;
+    }
 }
 
 .public-message-container{
     position: absolute;
     box-sizing: border-box;
-    width: 500px;
+    width: 40%;
     bottom: 0;
     left: 0;
     margin: 20px;
+    display: block;
+}
+
+.publicMessageInput{
+    display: none;
+}
+
+.public-send-button{
+    right: 0;
+    bottom: 0;
+    margin: 10px;
+    display: none;
+}
+
+.public-input-close{
+    right: 0;
+    bottom: 40px;
+    margin: 10px;
+    display: none;   
+}
+
+.private-input-close{
+    right: 0;
+    bottom: 40px;
+    margin: 10px;
+    display: none;   
+}
+
+.private-chat-container{
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    margin: 20px;
+    margin-bottom: 60px;
+    margin-right: 15%;
+    opacity: 0.4;
+    height: 30%;
+    width: 40%;
+    font-size: 1em;
+    padding: 15px 25px;
+    box-sizing: border-box;
+    overflow-y: scroll;
+    overflow-wrap: break-word;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar{
+        display: none;
+    }
+}
+
+.private-message-container{
+    position: absolute;
+    box-sizing: border-box;
+    width: 40%;
+    bottom: 0;
+    right: 0;
+    margin: 20px;
+    margin-right: 15%;
+    display: block;
+}
+
+.privateMessageInput{
+    display: none;
+}
+
+.private-send-button{
+    right: 0;
+    bottom: 0;
+    margin: 10px;
     display: none;
 }
 
@@ -105,21 +181,25 @@ canvas{
     position: absolute;
     bottom: 0;
     left: 0;
-    width: 500px;
+    /* width: 500px; */
+    width: 100%;
     padding: 10px 20px;
     padding-right: 50px;
     background-color: rgba(0, 0, 0, 0.5);
     color: white;
-    border: 1px solid rgba(255, 255, 255, 0.4);
+    border: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.4);
     font-size: 1em;
     box-sizing: border-box;
+    display: none;
+
+    &:focus{
+        outline-width: 0;
+    }
 }
 
-.sendButton{
+.sendButton, .options-item{
     position: absolute;
-    right: 0;
-    bottom: 0;
-    margin: 10px;
     width: 25px;
     color: white;
     transform: scale(1);
@@ -130,4 +210,93 @@ canvas{
         color: rgb(67, 167, 248);
         cursor: pointer;
     }
+}
+
+.closeInput{
+    position: absolute;
+    width: 20px;
+    opacity: 0.8;
+    color: white;
+    transform: scale(1);
+    transition: all 300ms;
+
+    &:hover{
+        transform: scale(1.2);
+        color: rgb(67, 167, 248);
+        cursor: pointer;
+    }
+}
+
+.public-chat-button{
+    display: none;
+    bottom: 0;
+    left: 0;
+    margin: 30px 30px;
+}
+
+.private-chat-button, .private-chat-button-close{
+    display: none;
+    bottom: 0;
+    right: 0;
+    margin: 30px 30px;
+    width: 30px;
+}
+
+.private-chat-button-close{
+    display: none;
+    width: 25px;
+    margin: 25px 34px;
+    
+    &:hover{
+        color: rgb(255, 88, 88);
+    }
+}
+
+.options-container{
+    position: absolute;
+    box-sizing: border-box;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: none;
+}
+
+.userlist-container {
+    position: absolute;
+    right: 0;
+    top: 0;
+    margin-top: 10%;
+    margin-right: 2%;
+    width: 15%;
+    height: 45%;
+    background-color: none;
+    color: white;
+    padding: 10px;
+    overflow-y: auto;
+    /* border: 1px solid white; */
+    display: none;
+    overflow-y: scroll;
+    overflow-wrap: break-word;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar{
+        display: none;
+    }
+}
+
+.users {
+    margin: 5px;
+    font-size: 1em;
+    /* border-bottom: 1px solid #222; */
+    padding: 10px;
+    cursor: pointer;
+    /* border-left: 2px solid rgba(103, 187, 255, 0.5); */
+
+    &:hover{
+        background-color: rgba(255, 255, 255, 0.2);
+    }
+}
+
+.users.new-message{
+    border-left: 2px solid rgba(103, 187, 255, 0.5);
 }

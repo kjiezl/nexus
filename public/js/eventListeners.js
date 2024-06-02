@@ -1,20 +1,24 @@
 window.addEventListener("keydown", (e) => {
     if(!fPlayers[socket.id]) return;
 
-    switch(e.key){
-        case 'w':
-            keys.w.pressed = true;
-            break;
-        case 's':
-            keys.s.pressed = true;
-            break;
-        case 'a':
-            keys.a.pressed = true;
-            break;
-        case 'd':
-            keys.d.pressed = true;
-            break;
+    const publicMessageInput = $(".publicMessageInput");
+    if(!publicMessageInput.is(":focus")){
+        switch(e.key){
+            case 'w':
+                keys.w.pressed = true;
+                break;
+            case 's':
+                keys.s.pressed = true;
+                break;
+            case 'a':
+                keys.a.pressed = true;
+                break;
+            case 'd':
+                keys.d.pressed = true;
+                break;
+        }
     }
+    
 })
 
 window.addEventListener("keyup", (e) => {
@@ -44,14 +48,54 @@ document.querySelector("#usernameForm").addEventListener("submit", (e) => {
         alert("Please enter username")
         return;
     }
-    $("#usernameForm, #formDiv").css("display", "none");
+    $("#usernameForm, #formDiv, .options-container, .public-chat-button, .private-chat-button").toggle();
     socket.emit("init", {username, color});
 })
 
-$(".publicSendButton").click(() => {sendPublicMessage()})
+$(".public-send-button").click(() => {
+    sendPublicMessage();
+})
 
-$(".publicMessageInput").keydown((e) => {
-    if(e.key === "Enter"){
-        sendPublicMessage();
-    }
+$(".public-chat-button").click(() => {
+    const publicMessageInput = $(".publicMessageInput");
+    const publicMessageContainer = $(".public-message-container");
+    const publicSendButton = $(".public-send-button");
+    const publicInputClose = $(".public-input-close");
+    const publicChatButton = $(".public-chat-button");
+    const publicChatContainer = $(".public-chat-container");
+
+    publicMessageContainer.add(publicMessageInput).add(publicSendButton).add(publicInputClose).css("display", "block");
+    publicChatButton.toggle();
+    publicMessageInput.focus();
+    publicChatContainer.css("opacity", 1);
+})
+
+$(".private-chat-button, .private-chat-button-close").click(() => {
+    $(".userlist-container, .private-chat-button-close, .private-chat-button").toggle();
+})
+
+$(".private-send-button").click(() => {
+    sendPrivateMessage();
+})
+
+$(".public-input-close").click(() => {
+    const publicMessageInput = $(".publicMessageInput");
+    const publicMessageContainer = $(".public-message-container");
+    const publicSendButton = $(".public-send-button");
+    const publicInputClose = $(".public-input-close");
+    const publicChatButton = $(".public-chat-button");
+    const publicChatContainer = $(".public-chat-container");
+
+    publicMessageContainer.add(publicMessageInput).add(publicSendButton).add(publicInputClose).toggle();
+    publicChatButton.toggle();
+    publicChatContainer.css("opacity", 0.4);
+})
+
+$(".private-input-close").click(() => {
+    const privateMessageContainer = $(".private-message-container");
+    const privateChatContainer = $(".private-chat-container");
+
+    privateMessageContainer.add(privateChatContainer).css("display", "none");
+
+    privateChatRecipient = null;
 })
