@@ -553,27 +553,15 @@ input::placeholder {
         width: 70%;
     }
 
-    .options-container{
-        bottom: 180px;
-    }
-
-    .public-chat-container{
-        bottom: 180px;
-    }
-
-    .private-chat-container{
-        bottom: 180px;
-    }
-
-    .messageInput{
+    .options-container, 
+    .public-chat-container,
+    .private-chat-container,
+    .messageInput,
+    .sendButton{
         bottom: 180px;
     }
 
     .closeInput{
         bottom: 210px;
-    }
-
-    .sendButton{
-        bottom: 180px;
     }
 }
