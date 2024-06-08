@@ -47,7 +47,7 @@ document.querySelector("#usernameForm").addEventListener("submit", (e) => {
     e.preventDefault();
     const username = $("#usernameInput").val();
     const color = $("#colorInput").val();
-    const room = $("#roomInput").val();
+    const room = "main";
     if(!username){
         alert("Please enter username")
         return;
@@ -121,4 +121,34 @@ $(".change-room-close").click(() => {
 
 $(".join-room-button").click(() => {
     joinRoom();
+})
+
+$(".create-room-button").click(() => {
+    let roomCode = '';
+
+    do{
+        roomCode = Array.from(Array(8), () => Math.floor(Math.random() * 36).toString(36)).join('');
+    } while(rooms.includes(roomCode))
+
+    socket.emit("new-room", roomCode);
+
+    socket.emit("change-room", roomCode);
+    $(".change-room-container").toggle();
+})
+
+$(".room-text-copy").click(() => {
+    let text = $("#room-text").text();
+    let tempText = $("<textarea>");
+    $("body").append(tempText);
+    tempText.val(text).select();
+    document.execCommand("copy");
+    tempText.remove();
+    $(".room-text-copy").toggle();
+    $(".room-text-copied").toggle();
+
+    setTimeout(() => {
+        $(".room-text-copy").toggle();
+        $(".room-text-copied").toggle();
+    }, 2 * 1000);
+    // alert(`copied ${text} to clipboard`)
 })

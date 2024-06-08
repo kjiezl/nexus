@@ -11,6 +11,7 @@ canvas.width = innerWidth;
 canvas.height = innerHeight;
 
 const fPlayers = {};
+const rooms = ["main"];
 
 var privateChatRecipient = null;
 
@@ -242,6 +243,18 @@ socket.on("enable-shoutout", () => {
     shoutoutButton.css("color", "white");
 });
 
+socket.on("update-rooms", (room) => {
+    rooms.push(room);
+})
+
+socket.on("remove-rooms", (room) => {
+    let i = rooms.indexOf(room);
+
+    if(i !== -1){
+        rooms.splice(i, 1);
+    }
+})
+
 function sendPublicMessage() {
     if ((publicSendButton || publicMessageInput.is(":focus")) && publicMessageInput.val() !== '') {
         publicMessageContainer.add(publicMessageInput).add(publicSendButton).add(publicChatButton).add(shoutoutButton).add(publicInputClose).toggle();
@@ -290,12 +303,15 @@ function updateShoutout(username, text) {
 function joinRoom(){
     const room = $(".join-room-input").val();
 
-    socket.emit("change-room", room);
+    if(rooms.includes(room)){
+        socket.emit("change-room", room);
 
-    $(".join-room-input").val('');
-    $(".change-room-container").toggle();
-
-    // $(".")
+        $(".join-room-input").val('');
+        $(".change-room-container").toggle();
+    } else{
+        $(".join-room-input").val('');
+        alert("Room does not exist!");
+    }
 }
 
 $(document).keydown((e) => {

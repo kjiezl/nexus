@@ -210,6 +210,13 @@ io.on("connection", (socket) => {
             console.error("Error fetching messages", err);
         });
 
+        let roomSize = io.sockets.adapter.rooms.get(prevRoom);
+
+        if(!roomSize && prevRoom !== "main"){
+            // console.log(`${prevRoom} has no players`)
+            io.emit("remove-rooms", prevRoom);
+        }
+
         const prevRoomPlayers = Object.keys(bPlayers)
             .filter(playerID => bPlayers[playerID].room === prevRoom)
             .reduce((acc, playerID) => {
@@ -229,6 +236,10 @@ io.on("connection", (socket) => {
 
             io.to(newRoom).emit("update-players", newRoomPlayers);
             io.to(newRoom).emit("update-playerlist", newRoomPlayers);
+    })
+
+    socket.on("new-room", (room) => {
+        io.emit("update-rooms", room);
     })
 
     socket.on("disconnect", () => {
