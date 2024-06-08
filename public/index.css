@@ -5,7 +5,7 @@ body {
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
     margin: 0;
-    background: #94a3b8;
+    background: #0f223d;
     font-family: "Radio Canada", sans-serif;
     color: white;
     font-size: 1em;
@@ -83,7 +83,7 @@ input::placeholder {
     width: 40%;
     /* border: 1px solid rgba(255, 255, 255, 0.2); */
     /* border-radius: 8% 8% 0px 0px; */
-    /* background-color: rgba(108, 119, 218, 0.2); */
+    /* background-color: rgba(0, 0, 0, 0.8); */
     font-size: 1em;
     padding: 15px 25px;
     padding-left: 45px;
@@ -149,6 +149,8 @@ input::placeholder {
     overflow-y: scroll;
     overflow-wrap: break-word;
     scrollbar-width: none;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: none;
 
     &::-webkit-scrollbar{
         display: none;
@@ -510,6 +512,30 @@ input::placeholder {
     display:none;
 }
 
+#joystick-container {
+    position: fixed;
+    bottom: 50px;
+    left: 50%;
+    width: 100px;
+    height: 100px;
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 50%;
+    touch-action: none;
+    transform: translateX(-50%);
+    display: none;
+}
+
+#joystick {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    background-color: rgba(255, 255, 255, 0.5);
+    border-radius: 50%;
+    top: 30px;
+    left: 30px;
+    touch-action: none;
+}
+
 @media screen and (max-width: 500px) {
     .userlist-container{
         width: 25%;
@@ -525,5 +551,29 @@ input::placeholder {
 
     .change-room-box{
         width: 70%;
+    }
+
+    .options-container{
+        bottom: 180px;
+    }
+
+    .public-chat-container{
+        bottom: 180px;
+    }
+
+    .private-chat-container{
+        bottom: 180px;
+    }
+
+    .messageInput{
+        bottom: 180px;
+    }
+
+    .closeInput{
+        bottom: 210px;
+    }
+
+    .sendButton{
+        bottom: 180px;
     }
 }

@@ -258,7 +258,7 @@ socket.on("remove-rooms", (room) => {
 function sendPublicMessage() {
     if ((publicSendButton || publicMessageInput.is(":focus")) && publicMessageInput.val() !== '') {
         publicMessageContainer.add(publicMessageInput).add(publicSendButton).add(publicChatButton).add(shoutoutButton).add(publicInputClose).toggle();
-        publicChatContainer.css("opacity", 0.4);
+        publicChatContainer.css("opacity", 0.4).css("background-color", "rgba(0, 0, 0, 0)");
 
         const message = publicMessageInput.val();
         socket.emit("public-message", message);
@@ -338,7 +338,7 @@ $(document).keydown((e) => {
             publicMessageContainer.add(publicMessageInput).add(publicSendButton).add(publicInputClose).css("display", "block");
             publicChatButton.add(shoutoutButton).toggle();
             publicMessageInput.focus();
-            publicChatContainer.css("opacity", 1);
+            publicChatContainer.css("opacity", 1).css("background-color", "rgba(0, 0, 0, 0.8)");
         }
     }
 
