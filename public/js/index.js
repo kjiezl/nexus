@@ -40,6 +40,8 @@ socket.on("update-players", (bPlayers) => {
     for(const id in bPlayers){
         const bPlayer = bPlayers[id];
 
+        $("#room-text").text(bPlayer.room);
+
         if(!fPlayers[id]){
             fPlayers[id] = new Player({
                 x: bPlayer.x, 
@@ -157,6 +159,7 @@ setInterval(() => {
 }, 15)
 
 socket.on("load-public-messages", (messages) => {
+    publicChat.innerHTML = '';
     messages.forEach((message) => {
         const messageElement = document.createElement("div");
         if (message.username === fPlayers[socket.id].username) {
@@ -284,6 +287,17 @@ function updateShoutout(username, text) {
     }
 }
 
+function joinRoom(){
+    const room = $(".join-room-input").val();
+
+    socket.emit("change-room", room);
+
+    $(".join-room-input").val('');
+    $(".change-room-container").toggle();
+
+    // $(".")
+}
+
 $(document).keydown((e) => {
     if (e.key === "Enter") {
         e.preventDefault();
@@ -301,6 +315,8 @@ $(document).keydown((e) => {
                 shoutoutInputContainer.toggle();
                 shoutoutStartTime = window.performance.now();
             }
+        } else if($(".join-room-input").is(":focus")){
+            joinRoom();
         }
         else if (fPlayers[socket.id].username) {
             publicMessageContainer.add(publicMessageInput).add(publicSendButton).add(publicInputClose).css("display", "block");

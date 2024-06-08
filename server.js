@@ -197,6 +197,40 @@ io.on("connection", (socket) => {
         io.to(socket.room).emit("enable-shoutout");
     });
 
+    socket.on("change-room", (newRoom) => {
+        const prevRoom = socket.room;
+        socket.leave(prevRoom);
+        socket.join(newRoom);
+        socket.room = newRoom;
+        bPlayers[socket.id].room = newRoom;
+
+        PublicMessage.find({ room: newRoom }).sort({ timestamp: 1 }).then(messages => {
+            socket.emit("load-public-messages", messages);
+        }).catch(err => {
+            console.error("Error fetching messages", err);
+        });
+
+        const prevRoomPlayers = Object.keys(bPlayers)
+            .filter(playerID => bPlayers[playerID].room === prevRoom)
+            .reduce((acc, playerID) => {
+                acc[playerID] = bPlayers[playerID];
+                return acc;
+            }, {})
+        
+        const newRoomPlayers = Object.keys(bPlayers)
+            .filter(playerID => bPlayers[playerID].room === newRoom)
+            .reduce((acc, playerID) => {
+                acc[playerID] = bPlayers[playerID];
+                return acc;
+            }, {})
+        
+            io.to(prevRoom).emit("update-players", prevRoomPlayers);
+            io.to(prevRoom).emit("update-playerlist", prevRoomPlayers);
+
+            io.to(newRoom).emit("update-players", newRoomPlayers);
+            io.to(newRoom).emit("update-playerlist", newRoomPlayers);
+    })
+
     socket.on("disconnect", () => {
         const room = bPlayers[socket.id]?.room;
         const username = socketIdToUsername[socket.id];

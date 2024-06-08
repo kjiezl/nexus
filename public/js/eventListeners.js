@@ -4,7 +4,8 @@ window.addEventListener("keydown", (e) => {
     const publicMessageInput = $(".publicMessageInput");
     if(!publicMessageInput.is(":focus") 
         && !privateMessageInput.is(":focus")
-        && !shoutoutInput.is(":focus")){
+        && !shoutoutInput.is(":focus")
+        && !$(".join-room-input").is(":focus")){
         switch(e.key){
             case 'w':
                 keys.w.pressed = true;
@@ -54,7 +55,7 @@ document.querySelector("#usernameForm").addEventListener("submit", (e) => {
     if(room){
         socket.emit("join-room", room);
     }
-    $("#usernameForm, #formDiv, .options-container, .public-chat-button, .private-chat-button").toggle();
+    $("#usernameForm, #formDiv, .options-container, .public-chat-button, .private-chat-button, .top-options-container").toggle();
     socket.emit("init", {username, color, room});
 })
 
@@ -108,4 +109,16 @@ $(".shoutout-send-button").click(() => {
 $(".shoutout-input-close").click(() => {
     shoutoutInputContainer.toggle();
     shoutoutInput.focus();
+})
+
+$(".change-room-button").click(() => {
+    $(".change-room-container").toggle();
+})
+
+$(".change-room-close").click(() => {
+    $(".change-room-container").toggle();
+})
+
+$(".join-room-button").click(() => {
+    joinRoom();
 })
