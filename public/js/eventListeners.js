@@ -48,6 +48,8 @@ document.querySelector("#usernameForm").addEventListener("submit", (e) => {
     const username = $("#usernameInput").val();
     const color = $("#colorInput").val();
     const room = "main";
+    const width = window.innerWidth - 100;
+    const height = window.innerHeight - 180;
     if(!username){
         alert("Please enter username")
         return;
@@ -56,7 +58,7 @@ document.querySelector("#usernameForm").addEventListener("submit", (e) => {
         socket.emit("join-room", room);
     }
     $("#usernameForm, #formDiv, .options-container, .public-chat-button, .private-chat-button, .top-options-container").toggle();
-    socket.emit("init", {username, color, room});
+    socket.emit("init", {username, color, room, width, height});
 
     if(window.innerWidth <= 500){
         $("#joystick-container").toggle();

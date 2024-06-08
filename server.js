@@ -103,13 +103,13 @@ io.on("connection", (socket) => {
         }, 15)
     })
 
-    socket.on("init", ({username, color, room}) => {
+    socket.on("init", ({username, color, room, width, height}) => {
         usernameToSocketId[username] = socket.id;
         socketIdToUsername[socket.id] = username;
 
         bPlayers[socket.id] = {
-            x: 500 * Math.random(),
-            y: 500 * Math.random(),
+            x: width * Math.random(),
+            y: height * Math.random(),
             radius: 20, 
             color,
             // color: `hsl(${360 * Math.random()}, 100%, 50%)`,
