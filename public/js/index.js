@@ -125,7 +125,7 @@ const keys = {
     }
 }
 
-const speed = 10;
+const speed = 5;
 const playerInputs = [];
 let sequenceNum = 0;
 
@@ -357,15 +357,49 @@ $(document).keydown((e) => {
 
 let animationId;
 
+const camera = {
+    x: 0,
+    y: 0,
+};
+
+function lerp(start, end, t) {
+    return start * (1 - t) + end * t;
+}
+
+function updateCamera(targetX, targetY) {
+    const lerpFactor = 0.06;
+    camera.x = lerp(camera.x, targetX - canvas.width / 2, lerpFactor);
+    camera.y = lerp(camera.y, targetY - canvas.height / 2, lerpFactor);
+}
+
 function animate() {
     animationId = requestAnimationFrame(animate);
     
-    c.fillStyle = "rgba(0, 0, 0, 0.5)";
+    c.fillStyle = "rgba(0, 0, 0, 0.3)";
     c.fillRect(0, 0, canvas.width, canvas.height);
+
+    // c.clearRect(0, 0, canvas.width, canvas.height);
+
+    const player = fPlayers[socket.id];
+    if(!player) return;
+
+    // const camera = {
+    //     x: player.x - canvas.width / 2,
+    //     y: player.y - canvas.height / 2
+    // }
+
+    if(player) {
+        updateCamera(player.x, player.y);
+    }
+
+    c.save();
+    c.translate(-camera.x, -camera.y);
+
+    c.restore();
 
     for(const id in fPlayers){
         const fPlayer = fPlayers[id];
-        fPlayer.draw();
+        fPlayer.draw(c, camera);
     }
 }
 

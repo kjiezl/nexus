@@ -54,6 +54,10 @@ document.querySelector("#usernameForm").addEventListener("submit", (e) => {
         alert("Please enter username")
         return;
     }
+    if(color === "#000000"){
+        alert("Please choose a lighter color")
+        return;
+    }
     if(room){
         socket.emit("join-room", room);
     }
