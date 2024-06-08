@@ -1,10 +1,11 @@
 class Player {
-    constructor({x, y, radius, color, username}) {
+    constructor({x, y, radius, color, username, room}) {
         this.x = x;
         this.y = y;
         this.radius = radius;
         this.color = color;
         this.username = username;
+        this.room = room;
     }
 
     draw() {

@@ -46,12 +46,16 @@ document.querySelector("#usernameForm").addEventListener("submit", (e) => {
     e.preventDefault();
     const username = $("#usernameInput").val();
     const color = $("#colorInput").val();
+    const room = $("#roomInput").val();
     if(!username){
         alert("Please enter username")
         return;
     }
+    if(room){
+        socket.emit("join-room", room);
+    }
     $("#usernameForm, #formDiv, .options-container, .public-chat-button, .private-chat-button").toggle();
-    socket.emit("init", {username, color});
+    socket.emit("init", {username, color, room});
 })
 
 $(".public-send-button").click(() => {
@@ -87,6 +91,7 @@ $(".private-input-close").click(() => {
 
 $(".shoutout-button").click(() => {
     shoutoutInputContainer.toggle();
+    shoutoutInput.focus();
 })
 
 $(".shoutout-send-button").click(() => {
@@ -102,4 +107,5 @@ $(".shoutout-send-button").click(() => {
 
 $(".shoutout-input-close").click(() => {
     shoutoutInputContainer.toggle();
+    shoutoutInput.focus();
 })

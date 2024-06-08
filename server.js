@@ -28,14 +28,16 @@ mongoose.connect("mongodb://localhost:27017/nexus")
 const publicMessageSchema = new mongoose.Schema({
     username: String,
     text: String,
-    timestamp: { type: Date, default: Date.now }
+    timestamp: { type: Date, default: Date.now },
+    room: String
 })
 
 const privateMessageSchema = new mongoose.Schema({
     sender: String,
     receiver: String,
     text: String,
-    timestamp: { type: Date, default: Date.now }
+    timestamp: { type: Date, default: Date.now },
+    room: String
 })
 
 const PublicMessage = mongoose.model("Public-Message", publicMessageSchema);
@@ -47,14 +49,27 @@ const socketIdToUsername = {};
 io.on("connection", (socket) => {
     console.log("a player connected");
 
-    PublicMessage.find().sort({ timestamp: 1 }).then(messages => {
-        socket.emit("load-public-messages", messages);
-    }).catch(err => {
-        console.error("Error fetching messages", err);
-    });
+    socket.on("join-room", (room) => {
+        socket.join(room);
+        socket.room = room;
 
-    io.emit("update-players", bPlayers)
-    console.log(bPlayers);
+        PublicMessage.find({ room }).sort({ timestamp: 1 }).then(messages => {
+            socket.emit("load-public-messages", messages);
+        }).catch(err => {
+            console.error("Error fetching messages", err);
+        });
+
+        const roomPlayers = Object.keys(bPlayers)
+            .filter(playerID => bPlayers[playerID].room === room)
+            .reduce((acc, playerID) => {
+                acc[playerID] = bPlayers[playerID];
+                return acc;
+            }, {})
+
+        io.to(room).emit("update-players", roomPlayers);
+        io.to(room).emit("update-playerlist", roomPlayers);
+        console.log(bPlayers);
+    })
 
     socket.on("keydown", ({key, sequenceNum}) => {
         bPlayers[socket.id].sequenceNum = sequenceNum;
@@ -72,34 +87,60 @@ io.on("connection", (socket) => {
                 bPlayers[socket.id].x += speed;
                 break;
         }
+
+        setInterval(() => {
+            const room = socket.room;
+            if(!room) return;
+    
+            const roomPlayers = Object.keys(bPlayers)
+                .filter(playerID => bPlayers[playerID].room === room)
+                .reduce((acc, playerID) => {
+                    acc[playerID] = bPlayers[playerID];
+                    return acc;
+                }, {})
+    
+            io.to(room).emit("update-players", roomPlayers);
+        }, 15)
     })
 
-    socket.on("init", ({username, color}) => {
+    socket.on("init", ({username, color, room}) => {
         usernameToSocketId[username] = socket.id;
         socketIdToUsername[socket.id] = username;
 
         bPlayers[socket.id] = {
             x: 500 * Math.random(),
             y: 500 * Math.random(),
-            radius: 20,
+            radius: 20, 
             color,
             // color: `hsl(${360 * Math.random()}, 100%, 50%)`,
             sequenceNum: 0,
-            username
+            username,
+            room
         }
-        io.emit("update-playerlist", bPlayers);
+
+        const roomPlayers = Object.keys(bPlayers)
+            .filter(playerID => bPlayers[playerID].room === room)
+            .reduce((acc, playerID) => {
+                acc[playerID] = bPlayers[playerID];
+                return acc;
+            }, {})
+
+        io.to(room).emit("update-playerlist", roomPlayers);
+        io.to(room).emit("update-players", roomPlayers);
     })
 
     socket.on("public-message", (message) => {
         const userMessage = {
             username: bPlayers[socket.id].username,
-            text: message
+            text: message,
+            // room: socket.room
         }
-        io.emit("public-message", userMessage);
+        io.to(socket.room).emit("public-message", userMessage);
 
         const publicMessage = new PublicMessage({
             username: userMessage.username,
-            text: userMessage.text
+            text: userMessage.text,
+            room: socket.room
         })
 
         publicMessage.save()
@@ -112,7 +153,7 @@ io.on("connection", (socket) => {
     })
 
     socket.on("private-message", ({ sender, receiver, text }) => {
-        const privateMessage = new PrivateMessage({ sender, receiver, text });
+        const privateMessage = new PrivateMessage({ sender, receiver, text, room: socket.room });
     
         privateMessage.save()
             .then(() => {
@@ -132,8 +173,8 @@ io.on("connection", (socket) => {
     socket.on("get-private-messages", ({ sender, receiver }) => {
         PrivateMessage.find({
             $or: [
-                { sender, receiver },
-                { sender: receiver, receiver: sender }
+                { sender, receiver, room: socket.room },
+                { sender: receiver, receiver: sender, room: socket.room }
             ]
         }).sort({ timestamp: 1 })
             .then(messages => {
@@ -149,26 +190,41 @@ io.on("connection", (socket) => {
             username: bPlayers[socket.id].username,
             text: message
         }
-        io.emit("shoutout-message", userMessage);
+        io.to(socket.room).emit("shoutout-message", userMessage);
     });    
 
     socket.on("enable-shoutout", () => {
-        io.emit("enable-shoutout");
+        io.to(socket.room).emit("enable-shoutout");
     });
 
     socket.on("disconnect", () => {
+        const room = bPlayers[socket.id]?.room;
         const username = socketIdToUsername[socket.id];
+
         delete usernameToSocketId[username];
         delete socketIdToUsername[socket.id];
         delete bPlayers[socket.id];
-        io.emit("update-players", bPlayers);
+        // io.emit("update-players", bPlayers);
+        // io.emit("update-playerlist", bPlayers);
+
+        if(room){
+            const roomPlayers = Object.keys(bPlayers)
+            .filter(playerID => bPlayers[playerID].room === room)
+            .reduce((acc, playerID) => {
+                acc[playerID] = bPlayers[playerID];
+                return acc;
+            }, {})
+
+            io.to(room).emit("update-playerlist", roomPlayers);
+            io.to(room).emit("update-players", roomPlayers);
+        }
     })
 })
 
-setInterval(() => {
-    io.emit("update-players", bPlayers);
-}, 15)
+// setInterval(() => {
+//     io.emit("update-players", bPlayers);
+// }, 15)
 
-server.listen(port, () => {
+server.listen(port, "0.0.0.0", () => {
     console.log(`Listening on port ${port}`);
 })

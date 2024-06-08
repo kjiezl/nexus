@@ -47,6 +47,18 @@ input::placeholder {
     background: #475569;
 }
 
+#roomInput{
+    font-family: "Radio Canada", sans-serif;
+    padding: 12px;
+    border-radius: 20px;
+    border: none;
+    background: #475569;
+    color: #cbd5e1;
+    font-size: 1em;
+    margin: 10px;
+    margin-top: 20px;
+}
+
 #submitButton{
     font-family: "Radio Canada", sans-serif;
     margin-top: 10px;
@@ -279,7 +291,7 @@ input::placeholder {
     margin-right: 2%;
     width: 15%;
     height: 45%;
-    background-color: none;
+    background-color: rgba(0, 0, 0, 0.5);
     color: white;
     padding: 10px;
     overflow-y: auto;
@@ -381,5 +393,19 @@ input::placeholder {
 
     &:hover{
         color: rgb(177, 51, 51);
+    }
+}
+
+@media screen and (max-width: 500px) {
+    .userlist-container{
+        width: 25%;
+    }
+
+	.shoutout-input-box{
+        width: 50%;
+    }
+
+    .shoutout-send-button{
+        margin-top: 20px;
     }
 }

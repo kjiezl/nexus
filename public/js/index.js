@@ -46,7 +46,8 @@ socket.on("update-players", (bPlayers) => {
                 y: bPlayer.y, 
                 radius: bPlayer.radius, 
                 color: bPlayer.color,
-                username: bPlayer.username
+                username: bPlayer.username,
+                room: bPlayer.room
             });
         } else{
             if(id === socket.id){
@@ -158,7 +159,12 @@ setInterval(() => {
 socket.on("load-public-messages", (messages) => {
     messages.forEach((message) => {
         const messageElement = document.createElement("div");
-        messageElement.innerHTML = `<span style="color: gray">${message.username}</span> : &nbsp ${message.text}`;
+        if (message.username === fPlayers[socket.id].username) {
+            messageElement.innerHTML = `<span style="color: rgb(77, 184, 255)">${message.username}</span> : &nbsp ${message.text}`;
+        } else {
+            messageElement.innerHTML = `<span style="color: gray">${message.username}</span> : &nbsp ${message.text}`;
+        }
+        // messageElement.innerHTML = `<span style="color: gray">${message.username}</span> : &nbsp ${message.text}`;
         messageElement.className = "textMessages";
         publicChat.appendChild(messageElement);
     });
