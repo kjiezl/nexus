@@ -111,21 +111,13 @@ socket.on("update-playerlist", (bPlayers) => {
 });
 
 const keys = {
-    w: {
-        pressed: false
-    },
-    s: {
-        pressed: false
-    },
-    a: {
-        pressed: false
-    },
-    d: {
-        pressed: false
-    }
+    w: { pressed: false },
+    s: { pressed: false },
+    a: { pressed: false },
+    d: { pressed: false }
 }
 
-const speed = 5;
+const speed = 7;
 const playerInputs = [];
 let sequenceNum = 0;
 
@@ -367,10 +359,14 @@ function lerp(start, end, t) {
 }
 
 function updateCamera(targetX, targetY) {
-    const lerpFactor = 0.06;
+    const lerpFactor = 0.6;
     camera.x = lerp(camera.x, targetX - canvas.width / 2, lerpFactor);
     camera.y = lerp(camera.y, targetY - canvas.height / 2, lerpFactor);
 }
+
+const borderWidth = 2000;
+const borderHeight = 1400;
+
 
 function animate() {
     animationId = requestAnimationFrame(animate);
@@ -382,18 +378,19 @@ function animate() {
 
     const player = fPlayers[socket.id];
     if(!player) return;
+    updateCamera(player.x, player.y);
 
     // const camera = {
     //     x: player.x - canvas.width / 2,
     //     y: player.y - canvas.height / 2
     // }
 
-    if(player) {
-        updateCamera(player.x, player.y);
-    }
-
     c.save();
     c.translate(-camera.x, -camera.y);
+
+    c.strokeStyle = "rgba(255, 255, 255, 0.3)";
+    c.lineWidth = 5;
+    c.strokeRect(50, 50, borderWidth, borderHeight);
 
     c.restore();
 

@@ -15,7 +15,7 @@ app.get('/', (req, res) => {
 
 const bPlayers = {}
 
-const speed = 5;
+const speed = 7;
 
 mongoose.connect("mongodb://localhost:27017/nexus")
     .then(() => {
@@ -45,6 +45,9 @@ const PrivateMessage = mongoose.model("Private-Message", privateMessageSchema);
 
 const usernameToSocketId = {};
 const socketIdToUsername = {};
+
+const gameWidth = 2000;
+var gameHeight = 1400;
 
 io.on("connection", (socket) => {
     console.log("a player connected");
@@ -87,6 +90,9 @@ io.on("connection", (socket) => {
                 bPlayers[socket.id].x += speed;
                 break;
         }
+
+        bPlayers[socket.id].x = Math.max(70, Math.min(bPlayers[socket.id].x, gameWidth + 30));
+        bPlayers[socket.id].y = Math.max(70, Math.min(bPlayers[socket.id].y, gameHeight + 30));
 
         setInterval(() => {
             const room = socket.room;

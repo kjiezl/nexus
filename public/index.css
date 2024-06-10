@@ -15,10 +15,11 @@ input::placeholder {
     color: #94a3b8;
 }
 
-/* canvas{
-    width: 100%;
-    height: 100%;
-} */
+canvas{
+    /* width: 100%;
+    height: 100%; */
+    display: block;
+}
 
 #formDiv{
     display: flex;
