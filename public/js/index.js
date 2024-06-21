@@ -37,6 +37,67 @@ const privateMessageInput = $(".privateMessageInput");
 const privateSendButton = $(".private-send-button");
 const privateInputClose = $(".private-input-close");
 
+const accessories = {
+    baseball: new Image(),
+    captain: new Image(),
+    paperhat: new Image(),
+    viking: new Image(),
+    russia: new Image(),
+    cowboy: new Image(),
+    hardhat: new Image(),
+    sombrero: new Image(),
+    flower: new Image(),
+    police: new Image(),
+    leaf: new Image(),
+    party: new Image(),
+    pirate: new Image(),
+    duck: new Image(),
+    cherry: new Image(),
+    egg: new Image(),
+    icecream: new Image(),
+    banana: new Image(),
+    tophat: new Image(),
+    pepper: new Image(),
+    chef: new Image(),
+    crown: new Image(),
+    dum: new Image(),
+    knight: new Image(),
+    egg2: new Image(),
+    toiletpaper: new Image(),
+    spanish: new Image(),
+    mask: new Image(),
+};
+
+accessories.baseball.src = "sprites/accessories/baseball.png";
+accessories.captain.src = "sprites/accessories/captain.png";
+accessories.paperhat.src = "sprites/accessories/paperhat.png";
+accessories.viking.src = "sprites/accessories/viking.png";
+accessories.russia.src = "sprites/accessories/russia.png";
+accessories.cowboy.src = "sprites/accessories/cowboy.png";
+accessories.hardhat.src = "sprites/accessories/hardhat.png";
+accessories.sombrero.src = "sprites/accessories/sombrero.png";
+accessories.flower.src = "sprites/accessories/flower.png";
+accessories.police.src = "sprites/accessories/police.png";
+accessories.leaf.src = "sprites/accessories/leaf.png";
+accessories.party.src = "sprites/accessories/party.png";
+accessories.pirate.src = "sprites/accessories/pirate.png";
+accessories.duck.src = "sprites/accessories/duck.png";
+accessories.cherry.src = "sprites/accessories/cherry.png";
+accessories.egg.src = "sprites/accessories/egg.png";
+accessories.icecream.src = "sprites/accessories/icecream.png";
+accessories.banana.src = "sprites/accessories/banana.png";
+accessories.tophat.src = "sprites/accessories/tophat.png";
+accessories.pepper.src = "sprites/accessories/pepper.png";
+accessories.chef.src = "sprites/accessories/chef.png";
+accessories.crown.src = "sprites/accessories/crown.png";
+accessories.dum.src = "sprites/accessories/dum.png";
+accessories.knight.src = "sprites/accessories/knight.png";
+accessories.egg2.src = "sprites/accessories/egg2.png";
+accessories.toiletpaper.src = "sprites/accessories/toiletpaper.png";
+accessories.spanish.src = "sprites/accessories/spanish.png";
+accessories.mask.src = "sprites/accessories/mask.png";
+
+
 socket.on("update-players", (bPlayers) => {
     for(const id in bPlayers){
         const bPlayer = bPlayers[id];
@@ -50,12 +111,15 @@ socket.on("update-players", (bPlayers) => {
                 radius: bPlayer.radius, 
                 color: bPlayer.color,
                 username: bPlayer.username,
-                room: bPlayer.room
+                room: bPlayer.room,
+                accessory: bPlayer.accessory,
+                direction: bPlayer.direction
             });
         } else{
             if(id === socket.id){
                 fPlayers[id].x = bPlayer.x;
                 fPlayers[id].y = bPlayer.y;
+                fPlayers[id].direction = bPlayer.direction;
     
                 const lastBIndex = playerInputs.findIndex(input => {
                     return bPlayer.sequenceNum === input.sequenceNum
@@ -76,6 +140,7 @@ socket.on("update-players", (bPlayers) => {
                     duration: 0.015,
                     ease: "linear"
                 })
+                fPlayers[id].direction = bPlayer.direction;
             }
         }
     }
@@ -117,7 +182,7 @@ const keys = {
     d: { pressed: false }
 }
 
-const speed = 7;
+const speed = 6;
 const playerInputs = [];
 let sequenceNum = 0;
 
@@ -140,6 +205,7 @@ setInterval(() => {
         sequenceNum++;
         playerInputs.push({sequenceNum, dx: -speed, dy: 0});
         fPlayers[socket.id].x -= speed;
+        fPlayers[socket.id].direction = "left";
         socket.emit("keydown", {key: 'a', sequenceNum});
     }
 
@@ -147,6 +213,7 @@ setInterval(() => {
         sequenceNum++;
         playerInputs.push({sequenceNum, dx: speed, dy: 0});
         fPlayers[socket.id].x += speed;
+        fPlayers[socket.id].direction = "right";
         socket.emit("keydown", {key: 'd', sequenceNum});
     }
 }, 15)

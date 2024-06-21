@@ -43,13 +43,30 @@ window.addEventListener("keyup", (e) => {
     }    
 })
 
-document.querySelector("#usernameForm").addEventListener("submit", (e) => {
+var selectedAccessory = '';
+
+$(".grid-item").click(function() {
+    $(".grid-item").removeClass("selected");
+    $(this).addClass("selected");
+    // $("#accessoryInput").val($(this).attr("data-accessory"));
+    selectedAccessory = $(this).attr("data-accessory");
+});
+
+$("#usernameForm").submit((e) => {
     e.preventDefault();
     const username = $("#usernameInput").val();
     const color = $("#colorInput").val();
     const room = "main";
-    const width = window.innerWidth - 100;
+    // if(username === "kwe"){
+    //     var accessory = "mask";
+    // } else{
+    //     var accessory = selectedAccessory;
+    // }
+    var accessory = selectedAccessory;
+
+    const width = window.innerWidth + 100;
     const height = window.innerHeight - 180;
+
     if(!username){
         alert("Please enter username")
         return;
@@ -62,7 +79,7 @@ document.querySelector("#usernameForm").addEventListener("submit", (e) => {
         socket.emit("join-room", room);
     }
     $("#usernameForm, #formDiv, .options-container, .public-chat-button, .private-chat-button, .top-options-container").toggle();
-    socket.emit("init", {username, color, room, width, height});
+    socket.emit("init", {username, color, room, width, height, accessory});
 
     if(window.innerWidth <= 500){
         $("#joystick-container").toggle();

@@ -15,7 +15,7 @@ app.get('/', (req, res) => {
 
 const bPlayers = {}
 
-const speed = 7;
+const speed = 6;
 
 mongoose.connect("mongodb://localhost:27017/nexus")
     .then(() => {
@@ -85,9 +85,11 @@ io.on("connection", (socket) => {
                 break;
             case 'a':
                 bPlayers[socket.id].x -= speed;
+                bPlayers[socket.id].direction = "left";
                 break;
             case 'd':
                 bPlayers[socket.id].x += speed;
+                bPlayers[socket.id].direction = "right";
                 break;
         }
 
@@ -106,10 +108,10 @@ io.on("connection", (socket) => {
                 }, {})
     
             io.to(room).emit("update-players", roomPlayers);
-        }, 15)
+        }, 5)
     })
 
-    socket.on("init", ({username, color, room, width, height}) => {
+    socket.on("init", ({username, color, room, width, height, accessory}) => {
         usernameToSocketId[username] = socket.id;
         socketIdToUsername[socket.id] = username;
 
@@ -121,7 +123,9 @@ io.on("connection", (socket) => {
             // color: `hsl(${360 * Math.random()}, 100%, 50%)`,
             sequenceNum: 0,
             username,
-            room
+            room,
+            accessory,
+            direction: "right"
         }
 
         const roomPlayers = Object.keys(bPlayers)
