@@ -5,7 +5,7 @@ const server = http.createServer(app);
 const { Server } = require("socket.io");
 const io = new Server(server, {pingInterval: 2000, pingTimeout: 3000});
 const mongoose = require("mongoose");
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 app.use(express.static("public"));
 
