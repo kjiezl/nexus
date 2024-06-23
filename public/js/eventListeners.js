@@ -190,6 +190,8 @@ $(".room-text-copy").click(() => {
 
 $(".search-button, .search-button-close").click(() => {
     $(".player-list-text, #search-input, .search-button, .search-button-close").toggle();
+    $("#search-input").val("");
+    updatePlayerList(fPlayers)
 })
 
 $("#search-input").on("input", function() {
