@@ -11,7 +11,7 @@ canvas.width = innerWidth;
 canvas.height = innerHeight;
 
 const fPlayers = {};
-const rooms = ["main"];
+var rooms = [];
 
 var privateChatRecipient = null;
 
@@ -290,8 +290,14 @@ socket.on("enable-shoutout", () => {
     shoutoutButton.css("color", "white");
 });
 
+socket.on("init-rooms", (room) => {
+    rooms = room;
+})
+
 socket.on("update-rooms", (room) => {
-    rooms.push(room);
+    if (!rooms.includes(room)) {
+        rooms.push(room);
+    }
 })
 
 socket.on("remove-rooms", (room) => {
@@ -300,6 +306,8 @@ socket.on("remove-rooms", (room) => {
     if(i !== -1){
         rooms.splice(i, 1);
     }
+
+    socket.emit("remove-room", room);
 })
 
 function sendPublicMessage() {

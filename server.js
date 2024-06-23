@@ -49,12 +49,16 @@ const socketIdToUsername = {};
 const gameWidth = 2000;
 var gameHeight = 1400;
 
+const rooms = ["main"]
+
 io.on("connection", (socket) => {
     console.log("a player connected");
 
     socket.on("join-room", (room) => {
         socket.join(room);
         socket.room = room;
+
+        io.emit("init-rooms", rooms);
 
         PublicMessage.find({ room }).sort({ timestamp: 1 }).then(messages => {
             socket.emit("load-public-messages", messages);
@@ -254,8 +258,17 @@ io.on("connection", (socket) => {
     })
 
     socket.on("new-room", (room) => {
+        rooms.push(room);
         io.emit("update-rooms", room);
     })
+
+    socket.on("remove-room", (room) => {
+        const i = rooms.indexOf(room);
+        if (i !== -1) {
+            rooms.splice(i, 1);
+            io.emit("init-rooms", rooms);
+        }
+    });
 
     socket.on("disconnect", () => {
         const room = bPlayers[socket.id]?.room;
