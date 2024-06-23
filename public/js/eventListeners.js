@@ -1,3 +1,5 @@
+"use strict";
+
 window.addEventListener("keydown", (e) => {
     if(!fPlayers[socket.id]) return;
 
@@ -83,7 +85,7 @@ $("#usernameForm").submit((e) => {
             if(room) {
                 socket.emit("join-room", room);
             }
-            $("#usernameForm, #formDiv, .options-container, .public-chat-button, .private-chat-button, .top-options-container").toggle();
+            $("#usernameForm, #formDiv, .options-container, .public-chat-button, .private-chat-button, .top-options-container, .public-chat-container").toggle();
             socket.emit("init", { username, color, room, width, height, accessory });
 
             if(window.innerWidth <= 500) {

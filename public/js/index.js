@@ -37,66 +37,44 @@ const privateMessageInput = $(".privateMessageInput");
 const privateSendButton = $(".private-send-button");
 const privateInputClose = $(".private-input-close");
 
+var unreadMessages = {}
+
 const accessories = {
-    baseball: new Image(),
-    captain: new Image(),
-    paperhat: new Image(),
-    viking: new Image(),
-    russia: new Image(),
-    cowboy: new Image(),
-    hardhat: new Image(),
-    sombrero: new Image(),
-    flower: new Image(),
-    police: new Image(),
-    leaf: new Image(),
-    party: new Image(),
-    pirate: new Image(),
-    duck: new Image(),
-    cherry: new Image(),
-    egg: new Image(),
-    icecream: new Image(),
-    banana: new Image(),
-    tophat: new Image(),
-    pepper: new Image(),
-    chef: new Image(),
-    crown: new Image(),
-    dum: new Image(),
-    knight: new Image(),
-    egg2: new Image(),
-    toiletpaper: new Image(),
-    spanish: new Image(),
-    mask: new Image(),
+    baseball: "sprites/accessories/baseball.png",
+    captain: "sprites/accessories/captain.png",
+    paperhat: "sprites/accessories/paperhat.png",
+    viking: "sprites/accessories/viking.png",
+    russia: "sprites/accessories/russia.png",
+    cowboy: "sprites/accessories/cowboy.png",
+    hardhat: "sprites/accessories/hardhat.png",
+    sombrero: "sprites/accessories/sombrero.png",
+    flower: "sprites/accessories/flower.png",
+    police: "sprites/accessories/police.png",
+    leaf: "sprites/accessories/leaf.png",
+    party: "sprites/accessories/party.png",
+    pirate: "sprites/accessories/pirate.png",
+    duck: "sprites/accessories/duck.png",
+    cherry: "sprites/accessories/cherry.png",
+    egg: "sprites/accessories/egg.png",
+    icecream: "sprites/accessories/icecream.png",
+    banana: "sprites/accessories/banana.png",
+    tophat: "sprites/accessories/tophat.png",
+    pepper: "sprites/accessories/pepper.png",
+    chef: "sprites/accessories/chef.png",
+    crown: "sprites/accessories/crown.png",
+    dum: "sprites/accessories/dum.png",
+    knight: "sprites/accessories/knight.png",
+    egg2: "sprites/accessories/egg2.png",
+    toiletpaper: "sprites/accessories/toiletpaper.png",
+    spanish: "sprites/accessories/spanish.png",
+    mask: "sprites/accessories/mask.png"
 };
 
-accessories.baseball.src = "sprites/accessories/baseball.png";
-accessories.captain.src = "sprites/accessories/captain.png";
-accessories.paperhat.src = "sprites/accessories/paperhat.png";
-accessories.viking.src = "sprites/accessories/viking.png";
-accessories.russia.src = "sprites/accessories/russia.png";
-accessories.cowboy.src = "sprites/accessories/cowboy.png";
-accessories.hardhat.src = "sprites/accessories/hardhat.png";
-accessories.sombrero.src = "sprites/accessories/sombrero.png";
-accessories.flower.src = "sprites/accessories/flower.png";
-accessories.police.src = "sprites/accessories/police.png";
-accessories.leaf.src = "sprites/accessories/leaf.png";
-accessories.party.src = "sprites/accessories/party.png";
-accessories.pirate.src = "sprites/accessories/pirate.png";
-accessories.duck.src = "sprites/accessories/duck.png";
-accessories.cherry.src = "sprites/accessories/cherry.png";
-accessories.egg.src = "sprites/accessories/egg.png";
-accessories.icecream.src = "sprites/accessories/icecream.png";
-accessories.banana.src = "sprites/accessories/banana.png";
-accessories.tophat.src = "sprites/accessories/tophat.png";
-accessories.pepper.src = "sprites/accessories/pepper.png";
-accessories.chef.src = "sprites/accessories/chef.png";
-accessories.crown.src = "sprites/accessories/crown.png";
-accessories.dum.src = "sprites/accessories/dum.png";
-accessories.knight.src = "sprites/accessories/knight.png";
-accessories.egg2.src = "sprites/accessories/egg2.png";
-accessories.toiletpaper.src = "sprites/accessories/toiletpaper.png";
-accessories.spanish.src = "sprites/accessories/spanish.png";
-accessories.mask.src = "sprites/accessories/mask.png";
-
+for(const [key, src] of Object.entries(accessories)) {
+    const img = new Image();
+    img.src = src;
+    accessories[key] = img;
+}
 
 socket.on("update-players", (bPlayers) => {
     for(const id in bPlayers){
@@ -157,15 +135,19 @@ function updatePlayerList(bPlayers, query = "") {
     const userList = $(".userlist");
     userList.empty();
 
-    for(const id in bPlayers) {
-        if(id !== socket.id) {
+    for (const id in bPlayers) {
+        if (id !== socket.id) {
             const bPlayer = bPlayers[id];
-            if(bPlayer.username.toLowerCase().startsWith(query)) {
+            if (bPlayer.username.toLowerCase().startsWith(query)) {
                 const userElement = $("<div>").addClass("users").text(bPlayer.username);
-                userElement.on("click", function() {
+                if (unreadMessages[bPlayer.username]) {
+                    userElement.addClass("new-message");
+                }
+                userElement.on("click", function () {
                     privateChatRecipient = bPlayer.username;
                     openPrivateChat(bPlayer.username);
                     userElement.removeClass("new-message");
+                    unreadMessages[bPlayer.username] = false;
                 });
                 userList.append(userElement);
             }
@@ -176,7 +158,8 @@ function updatePlayerList(bPlayers, query = "") {
 }
 
 socket.on("update-playerlist", function(bPlayers) {
-    updatePlayerList(bPlayers);
+    const query = $("#search-input").val().toLowerCase(); 
+    updatePlayerList(bPlayers, query);
 });
 
 const keys = {
@@ -272,6 +255,7 @@ socket.on("private-message", (message) => {
                 if (!userElement.classList.contains("new-message")) {
                     userElement.classList.add("new-message");
                 }
+                unreadMessages[message.sender] = true;
             }
         });
     }
