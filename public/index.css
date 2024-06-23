@@ -316,6 +316,63 @@ canvas{
     border-left: 2px solid rgba(103, 187, 255, 0.5);
 }
 
+.search-container{
+    position: absolute;
+    right: 0;
+    top: 0;
+    margin: 8px;
+}
+
+#search-input{
+    /* position: inherit; */
+    width: 100%;
+    top: 0;
+    left: 0;
+    right: 35px;
+    /* margin-top: 8px; */
+    display: none;
+    font-family: "Radio Canada", sans-serif;
+    padding: 5px 5px;
+    padding-right: 25px;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+    font-size: 0.7  em;
+    box-sizing: border-box;
+
+    &:focus{
+        outline-width: 0;
+    }
+}
+
+.search-button{
+    color: white;
+    width: 20px;
+    cursor: pointer;
+    transform: scale(1);
+    transition: all 300ms;
+
+    &:hover{
+        transform: scale(1.2);
+        color: rgb(67, 167, 248);
+    }
+}
+
+.search-button-close{
+    display: none;
+    color: white;
+    width: 20px;
+    cursor: pointer;
+    transform: scale(1);
+    transition: all 300ms;
+
+    &:hover{
+        transform: scale(1.2);
+        color: rgb(255, 88, 88);
+    }
+}
+
 .shoutout-container{
     position: absolute;
     box-sizing: border-box;
@@ -607,5 +664,9 @@ canvas{
 
     .closeInput{
         bottom: 210px;
+    }
+
+    .grid-container{
+        grid-template-columns: repeat(6, 50px);
     }
 }

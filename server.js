@@ -111,6 +111,11 @@ io.on("connection", (socket) => {
         }, 5)
     })
 
+    socket.on("check-username", (username, callback) => {
+        const exists = Object.values(bPlayers).some(player => player.username === username);
+        callback({ exists });
+    });
+
     socket.on("init", ({username, color, room, width, height, accessory}) => {
         usernameToSocketId[username] = socket.id;
         socketIdToUsername[socket.id] = username;

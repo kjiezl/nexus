@@ -153,26 +153,30 @@ socket.on("update-players", (bPlayers) => {
 //   console.log(fPlayers)
 })
 
-socket.on("update-playerlist", (bPlayers) => {
-    const userList = document.querySelector(".userlist");
-    userList.innerHTML = '';
+function updatePlayerList(bPlayers, query = "") {
+    const userList = $(".userlist");
+    userList.empty();
 
-    for (const id in bPlayers) {
-        if (id !== socket.id) {
+    for(const id in bPlayers) {
+        if(id !== socket.id) {
             const bPlayer = bPlayers[id];
-            const userElement = document.createElement("div");
-            userElement.className = "users";
-            userElement.textContent = bPlayer.username;
-            userElement.addEventListener("click", () => {
-                privateChatRecipient = bPlayer.username;
-                openPrivateChat(bPlayer.username);
-                userElement.classList.remove("new-message");
-            });
-            userList.appendChild(userElement);
+            if(bPlayer.username.toLowerCase().startsWith(query)) {
+                const userElement = $("<div>").addClass("users").text(bPlayer.username);
+                userElement.on("click", function() {
+                    privateChatRecipient = bPlayer.username;
+                    openPrivateChat(bPlayer.username);
+                    userElement.removeClass("new-message");
+                });
+                userList.append(userElement);
+            }
         }
     }
 
-    $("#playerCount").text(`${Object.keys(bPlayers).length}`);
+    $("#playerCount").text(Object.keys(bPlayers).length);
+}
+
+socket.on("update-playerlist", function(bPlayers) {
+    updatePlayerList(bPlayers);
 });
 
 const keys = {

@@ -75,16 +75,23 @@ $("#usernameForm").submit((e) => {
         alert("Please choose a lighter color")
         return;
     }
-    if(room){
-        socket.emit("join-room", room);
-    }
-    $("#usernameForm, #formDiv, .options-container, .public-chat-button, .private-chat-button, .top-options-container").toggle();
-    socket.emit("init", {username, color, room, width, height, accessory});
 
-    if(window.innerWidth <= 500){
-        $("#joystick-container").toggle();
-        canvas.height = window.innerHeight - 180;
-    }
+    socket.emit("check-username", username, (res) => {
+        if(res.exists) {
+            alert("Username already exists.");
+        } else {
+            if(room) {
+                socket.emit("join-room", room);
+            }
+            $("#usernameForm, #formDiv, .options-container, .public-chat-button, .private-chat-button, .top-options-container").toggle();
+            socket.emit("init", { username, color, room, width, height, accessory });
+
+            if(window.innerWidth <= 500) {
+                $("#joystick-container").toggle();
+                canvas.height = window.innerHeight - 180;
+            }
+        }
+    });
 })
 
 $(".public-send-button").click(() => {
@@ -181,6 +188,14 @@ $(".room-text-copy").click(() => {
     // alert(`copied ${text} to clipboard`)
 })
 
+$(".search-button, .search-button-close").click(() => {
+    $(".player-list-text, #search-input, .search-button, .search-button-close").toggle();
+})
+
+$("#search-input").on("input", function() {
+    const query = $(this).val().toLowerCase();
+    updatePlayerList(fPlayers, query);
+});
 
 // joystick for mobile devices (still buggy)
 
