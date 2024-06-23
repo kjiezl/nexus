@@ -7,7 +7,8 @@ const io = new Server(server, {pingInterval: 2000, pingTimeout: 3000});
 const mongoose = require("mongoose");
 const port = process.env.PORT || 3000;
 
-const connectionString = process.env.DATABASE_URL || "mongodb://localhost:27017/nexus";
+const connectionString = "mongodb+srv://kjiezl08:WZYhLO9qmdPx8sNh@cluster0.il3nkt0.mongodb.net/";
+// const connectionString = "mongodb+srv://kjiezl08:WZYhLO9qmdPx8sNh@cluster0.il3nkt0.mongodb.net/" || process.env.DATABASE_URL || "mongodb://localhost:27017/nexus";
 
 app.use(express.static("public"));
 
