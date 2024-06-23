@@ -7,6 +7,8 @@ const io = new Server(server, {pingInterval: 2000, pingTimeout: 3000});
 const mongoose = require("mongoose");
 const port = process.env.PORT || 3000;
 
+const connectionString = process.env.DATABASE_URL;
+
 app.use(express.static("public"));
 
 app.get('/', (req, res) => {
@@ -17,7 +19,8 @@ const bPlayers = {}
 
 const speed = 6;
 
-mongoose.connect("mongodb://localhost:27017/nexus")
+// mongoose.connect("mongodb://localhost:27017/nexus")
+mongoose.connect(connectionString)
     .then(() => {
         console.log("MongoDB Connected")
     })
