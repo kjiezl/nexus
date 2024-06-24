@@ -129,8 +129,10 @@ io.on("connection", (socket) => {
         socketIdToUsername[socket.id] = username;
 
         bPlayers[socket.id] = {
-            x: width * Math.random(),
-            y: height * Math.random(),
+            // x: width * Math.random(),
+            // y: height * Math.random(),
+            x: (Math.random() * width),
+            y: (Math.random() * height),
             radius: 20, 
             color,
             // color: `hsl(${360 * Math.random()}, 100%, 50%)`,

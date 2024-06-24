@@ -66,8 +66,10 @@ $("#usernameForm").submit((e) => {
     // }
     var accessory = selectedAccessory;
 
-    const width = window.innerWidth + 100;
-    const height = window.innerHeight - 180;
+    // const width = window.innerWidth + 100;
+    // const height = window.innerHeight - 180;
+    const width = 2000;
+    const height = 1400;
 
     if(!username){
         alert("Please enter username")
@@ -88,10 +90,10 @@ $("#usernameForm").submit((e) => {
             $("#usernameForm, #formDiv, .options-container, .public-chat-button, .private-chat-button, .top-options-container, .public-chat-container").toggle();
             socket.emit("init", { username, color, room, width, height, accessory });
 
-            if(window.innerWidth <= 500) {
-                $("#joystick-container").toggle();
-                canvas.height = window.innerHeight - 180;
-            }
+            // if(window.innerWidth <= 500) {
+            //     $("#joystick-container").toggle();
+            //     canvas.height = window.innerHeight - 180;
+            // }
         }
     });
 })
