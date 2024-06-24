@@ -128,7 +128,6 @@ socket.on("update-players", (bPlayers) => {
             delete fPlayers[id];
         }
     }
-//   console.log(fPlayers)
 })
 
 function updatePlayerList(bPlayers, query = "") {
@@ -214,7 +213,6 @@ socket.on("load-public-messages", (messages) => {
         } else {
             messageElement.innerHTML = `<span style="color: gray">${message.username}</span> : &nbsp ${message.text}`;
         }
-        // messageElement.innerHTML = `<span style="color: gray">${message.username}</span> : &nbsp ${message.text}`;
         messageElement.className = "textMessages";
         publicChat.appendChild(messageElement);
     });
@@ -397,14 +395,6 @@ $(document).keydown((e) => {
         }
     }
 
-    // if(e.key === "Escape"){
-    //     e.preventDefault();
-
-    //     publicMessageContainer.add(publicMessageInput).add(publicSendButton).toggle();
-    //     publicChatButton.toggle();
-    //     publicChatContainer.css("opacity", 0.4);
-    // }
-
     if(e.key === "Tab"){
         $(".userlist-container, .private-chat-button-close, .private-chat-button").toggle();
     }
@@ -437,17 +427,10 @@ function animate() {
     c.fillStyle = "rgba(0, 0, 0, 0.3)";
     c.fillRect(0, 0, canvas.width, canvas.height);
 
-    // c.clearRect(0, 0, canvas.width, canvas.height);
-
     const player = fPlayers[socket.id];
     if(!player) return;
     updateCamera(player.x, player.y);
-
-    // const camera = {
-    //     x: player.x - canvas.width / 2,
-    //     y: player.y - canvas.height / 2
-    // }
-
+    
     c.save();
     c.translate(-camera.x, -camera.y);
 

@@ -129,13 +129,10 @@ io.on("connection", (socket) => {
         socketIdToUsername[socket.id] = username;
 
         bPlayers[socket.id] = {
-            // x: width * Math.random(),
-            // y: height * Math.random(),
             x: (Math.random() * width),
             y: (Math.random() * height),
             radius: 20, 
             color,
-            // color: `hsl(${360 * Math.random()}, 100%, 50%)`,
             sequenceNum: 0,
             username,
             room,
@@ -158,7 +155,6 @@ io.on("connection", (socket) => {
         const userMessage = {
             username: bPlayers[socket.id].username,
             text: message,
-            // room: socket.room
         }
         io.to(socket.room).emit("public-message", userMessage);
 
@@ -187,7 +183,6 @@ io.on("connection", (socket) => {
                 if (receiverSocketId) {
                     io.to(receiverSocketId).emit("private-message", { sender, text, receiver: socket.id });
                 }
-                // io.to(receiver).emit("private-message", { sender, text, receiver: socket.id });
                 socket.emit("private-message", { sender, text, receiver });
             })
             .catch(err => {
@@ -238,7 +233,6 @@ io.on("connection", (socket) => {
         let roomSize = io.sockets.adapter.rooms.get(prevRoom);
 
         if(!roomSize && prevRoom !== "main"){
-            // console.log(`${prevRoom} has no players`)
             io.emit("remove-rooms", prevRoom);
         }
 
@@ -283,8 +277,6 @@ io.on("connection", (socket) => {
         delete usernameToSocketId[username];
         delete socketIdToUsername[socket.id];
         delete bPlayers[socket.id];
-        // io.emit("update-players", bPlayers);
-        // io.emit("update-playerlist", bPlayers);
 
         if(room){
             const roomPlayers = Object.keys(bPlayers)
@@ -299,10 +291,6 @@ io.on("connection", (socket) => {
         }
     })
 })
-
-// setInterval(() => {
-//     io.emit("update-players", bPlayers);
-// }, 15)
 
 server.listen(port, "0.0.0.0", () => {
     console.log(`Listening on port ${port}`);

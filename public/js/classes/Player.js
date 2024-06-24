@@ -40,7 +40,6 @@ class Player {
                 } else {
                     imgSize = this.radius * 2;
                 }
-                // c.drawImage(img, screenX - imgSize / 2, screenY - imgSize, imgSize, imgSize);
                 c.save();
                 if (this.direction === "left") {
                     c.translate(screenX, screenY);

@@ -50,7 +50,6 @@ var selectedAccessory = '';
 $(".grid-item").click(function() {
     $(".grid-item").removeClass("selected");
     $(this).addClass("selected");
-    // $("#accessoryInput").val($(this).attr("data-accessory"));
     selectedAccessory = $(this).attr("data-accessory");
 });
 
@@ -59,15 +58,8 @@ $("#usernameForm").submit((e) => {
     const username = $("#usernameInput").val();
     const color = $("#colorInput").val();
     const room = "main";
-    // if(username === "kwe"){
-    //     var accessory = "mask";
-    // } else{
-    //     var accessory = selectedAccessory;
-    // }
     var accessory = selectedAccessory;
 
-    // const width = window.innerWidth + 100;
-    // const height = window.innerHeight - 180;
     const width = 2000;
     const height = 1400;
 
@@ -89,11 +81,6 @@ $("#usernameForm").submit((e) => {
             }
             $("#usernameForm, #formDiv, .options-container, .public-chat-button, .private-chat-button, .top-options-container, .public-chat-container").toggle();
             socket.emit("init", { username, color, room, width, height, accessory });
-
-            // if(window.innerWidth <= 500) {
-            //     $("#joystick-container").toggle();
-            //     canvas.height = window.innerHeight - 180;
-            // }
         }
     });
 })
@@ -189,7 +176,6 @@ $(".room-text-copy").click(() => {
         $(".room-text-copy").toggle();
         $(".room-text-copied").toggle();
     }, 2 * 1000);
-    // alert(`copied ${text} to clipboard`)
 })
 
 $(".search-button, .search-button-close").click(() => {
@@ -201,73 +187,4 @@ $(".search-button, .search-button-close").click(() => {
 $("#search-input").on("input", function() {
     const query = $(this).val().toLowerCase();
     updatePlayerList(fPlayers, query);
-});
-
-// joystick for mobile devices (still buggy)
-
-const joystickContainer = document.getElementById('joystick-container');
-const joystick = document.getElementById('joystick');
-const maxDistance = 40;
-let isDragging = false;
-
-function handleJoystickMove(event) {
-    if(!fPlayers[socket.id]) return;
-
-    const touch = event.touches[0] || event.changedTouches[0];
-    const containerRect = joystickContainer.getBoundingClientRect();
-    const centerX = containerRect.left + containerRect.width / 2;
-    const centerY = containerRect.top + containerRect.height / 2;
-
-    let deltaX = touch.clientX - centerX;
-    let deltaY = touch.clientY - centerY;
-
-    const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-    if (distance > maxDistance) {
-        const angle = Math.atan2(deltaY, deltaX);
-        deltaX = Math.cos(angle) * maxDistance;
-        deltaY = Math.sin(angle) * maxDistance;
-    }
-
-    joystick.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
-
-    const angle = Math.atan2(deltaY, deltaX);
-
-    keys.w.pressed = false;
-    keys.s.pressed = false;
-    keys.a.pressed = false;
-    keys.d.pressed = false;
-
-    if (angle > -Math.PI / 4 && angle < Math.PI / 4) {
-        keys.d.pressed = true;
-    }
-    if (angle > Math.PI / 4 && angle < 3 * Math.PI / 4) {
-        keys.s.pressed = true;
-    }
-    if (angle < -Math.PI / 4 && angle > -3 * Math.PI / 4) {
-        keys.w.pressed = true;
-    }
-    if (angle > 3 * Math.PI / 4 || angle < -3 * Math.PI / 4) {
-        keys.a.pressed = true;
-    }
-}
-
-joystick.addEventListener('touchstart', (event) => {
-    isDragging = true;
-    handleJoystickMove(event);
-});
-
-joystick.addEventListener('touchmove', (event) => {
-    if (isDragging) {
-        handleJoystickMove(event);
-    }
-});
-
-joystick.addEventListener('touchend', () => {
-    isDragging = false;
-    joystick.style.transform = 'translate(0, 0)';
-
-    keys.w.pressed = false;
-    keys.s.pressed = false;
-    keys.a.pressed = false;
-    keys.d.pressed = false;
 });
